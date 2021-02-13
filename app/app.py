@@ -1,8 +1,15 @@
 import os
 
+from flask_sqlalchemy import SQLAlchemy
+#from flask_bcrypt import Bcrypt
+# from flask_login import LoginManager
+from flask_migrate import Migrate
+#from flask_moment import Moment
+#from flask_bootstrap import Bootstrap
+#from flask_pagedown import PageDown
+#from flask_socketio import SocketIO, emit
 from flask import Flask, render_template
 from . import settings, controllers, models
-from .extensions import db
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -17,13 +24,17 @@ def create_app(config_object=settings):
     return app
 
 def register_extensions(app):
-    """Register Flask extensions."""
-    db.init_app(app)
-
-    with app.app_context():
-        db.create_all()
-    return None
-
+        """Register Flask extensions."""
+        db = SQLAlchemy(app)
+        migrate = Migrate(app,db)
+        # bcrypt = Bcrypt(app)
+        # moment = Moment(app)
+        # bootstrap = Bootstrap(app)
+        # pagedown = PageDown(app)
+#        socketio = SocketIO(app)
+        # login_manager = LoginManager(app)
+        # login_manager.login_view = 'login'
+        # login_manager.login_message_category = 'info'
 def register_blueprints(app):
     """Register Flask blueprints."""
     app.register_blueprint(controllers.home.blueprint)
